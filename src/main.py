@@ -1,7 +1,10 @@
 from fastapi import FastAPI
+from .api.events import router as event_router
 
 app = FastAPI()
 
+# Routers
+app.include_router(event_router, prefix='/api/events')
 
 @app.get("/")
 def read_root():
