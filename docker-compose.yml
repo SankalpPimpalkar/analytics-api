@@ -1,11 +1,22 @@
 services:
+  db_service:
+    image: timescale/timescaledb:latest-pg17
+    env_file:
+      - .env.compose
+    volumes:
+      - timescaledb_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    expose:
+      - 5432
+
   app:
     image: analytics-api
     build:
       context: .
       dockerfile: Dockerfile
     env_file:  
-      - .env
+      - .env.compose
     ports:
       - "8000:8000"
     volumes:
@@ -19,3 +30,6 @@ services:
         - action: rebuild
           path: docker-compose.yml
     command: uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  timescaledb_data:
