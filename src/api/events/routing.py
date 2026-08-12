@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from .schema import EventSchema, EventListSchema
+from .model import EventModel, EventListSchema
 from ..db.config import DATABASE_URL
 
 router = APIRouter()
@@ -10,13 +10,13 @@ def read_events() -> EventListSchema:
     return EventListSchema(results=[])
 
 @router.post("/")
-def create_event(event: EventSchema) -> EventSchema:
-    return EventSchema(**event.dict())
+def create_event(event: EventModel) -> EventModel:
+    return EventModel(**event.dict())
 
 @router.get("/{event_id}")
-def get_event(event_id: int) -> EventSchema:
-    return EventSchema(id=event_id)
+def get_event(event_id: int) -> EventModel:
+    return EventModel(id=event_id)
 
 @router.delete("/{event_id}")
-def delete_event(event_id: int) -> EventSchema:
-    return EventSchema(id=event_id)
+def delete_event(event_id: int) -> EventModel:
+    return EventModel(id=event_id)
