@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
-from .model import EventModel, EventListSchema
+from .model import EventModel, EventListSchema, get_utc_now
 from ..db.session import get_session
 from ..db.config import DATABASE_URL
 
@@ -45,7 +45,7 @@ def update_event(event_id: int, event: EventModel, session: Session = Depends(ge
         if k == 'id':
             continue
         setattr(result, k, v)
-
+    setattr(result, 'updated_at', get_utc_now())
     session.add(data)
     session.commit()
     session.refresh(result)
